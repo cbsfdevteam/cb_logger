@@ -1,8 +1,6 @@
-# Recoding custom logs with Platform Events
+# cb_Looger - Custom log framework
 Salesforce logging tool powered by Platform Events and Big Objects.
 
-Documentation
--------------
 A log based on Big Objects that is called from apex for a variety of log needs.<br/>
 “SUCCESS”, “FAIL”, “LOG”, “CALLOUT_RETRY”, “EXCEPTION” and more….<br/>
 In apex we can use the CB_Logger class and by calling a simple method to determine the log type, subject and body.<br/>
@@ -12,8 +10,114 @@ The reason for publishing a platform event and not writing directly to the big o
 Once the objects are committed, we can then go to the logger UI, and filter by date, log type, or subject.<br/>
 You can expand the message to view all the details, and if there is something that needs to be shared with a team member you can use the email button in the UI to choose the recipient from a pre-determined list (managed via custom label) and send them a copy.<br/>
 
+Documentation
+-------------
+To log a custom log, use the following method:
+```javascript
+CB_Logger.log(LogType,Subject,Body);
+```
 
-Install CB_Logger
+To publish saved logs, use the following method:
+```javascript
+CB_Logger.publish();
+```
+*this method will publish all the logs saved till this point in the running instance.
+
+the following log type are prebuilt:
+<table>
+	<thead>
+		<th>Log type</th>
+	</thead>
+	<tbody>
+		<tr>
+			<td>
+				LOG
+			</td>
+		</tr>
+		<tr>
+			<td>
+				SUCCESS
+			</td>
+		</tr>	
+		<tr>
+			<td>
+        FAIL
+			</td>
+		</tr>	
+		<tr>
+			<td>
+        ALERT
+			</td>
+		</tr>
+    		<tr>
+			<td>
+        CALLOUT_FAIL
+			</td>
+		</tr>
+     <tr>
+			<td>
+        CALLOUT_SUCCESS
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+How to add/change log types:
+go to "LogType" class and add or change the log enum list.
+
+The following log methods are available:
+<table>
+	<thead>
+		<th>Type</th>
+    <th>method</th>
+	</thead>
+	<tbody>
+		<tr>
+			<td>
+				log
+			</td>
+			<td>
+				log(LogType type, String subject, String Body);
+			</td>
+		</tr>
+		<tr>
+			<td>
+				log
+			</td>
+			<td>
+				log(String type, String Body);
+			</td>
+		</tr>	
+		<tr>
+			<td>
+        error
+			</td>
+			<td>
+        error(String Subject, Object Body);
+			</td>
+		</tr>	
+		<tr>
+			<td>
+        ALERT
+			</td>
+			<td>
+        alert(String Subject, Object Body);
+			</td>
+		</tr>
+    		<tr>
+			<td>
+        success
+			</td>
+			<td>
+        success(String Subject, Object Body)
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+
+
+Install CB_Logger package in your org
 -------------
 <a href="https://login.salesforce.com/packaging/installPackage.apexp?p0=04t4L000000gawa">
 Install Package.
