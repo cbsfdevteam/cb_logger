@@ -109,7 +109,7 @@ The following log methods are available:
         success
 			</td>
 			<td>
-        success(String Subject, Object Body)
+        success(String Subject, Object Body);
 			</td>
 		</tr>
 	</tbody>
