@@ -12,21 +12,21 @@ You can expand the message to view all the details, and if there is something th
 
 Documentation
 -------------
-<b>To log a custom log, use the following method:</b>
+To log a custom log, use the following method:
 ```javascript
 CB_Logger.log(LogType,Subject,Body);
 ```
 
-<b>To publish saved logs, use the following method:</b>
+To publish saved logs, use the following method:
 ```javascript
 CB_Logger.publish();
 ```
 *this method will publish all the logs saved till this point in the running instance.
 <br/><br/>
-<b>How to add/change log types:</b><br/>
+How to add/change log types:<br/>
 Go to "LogType" class and add or change the log enum list.
 <br/><br/>
-<b>The following log type are prebuilt:</b>
+The following log type are prebuilt:
 <table>
 	<thead>
 		<th>Log type</th>
@@ -65,7 +65,7 @@ Go to "LogType" class and add or change the log enum list.
 	</tbody>
 </table>
 <br/>
-<b>The following log methods are available:<b/>
+The following log methods are available:
 <table>
 	<thead>
 		<th>Type</th>
