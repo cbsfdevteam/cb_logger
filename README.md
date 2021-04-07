@@ -1,4 +1,4 @@
-# cb_Looger - Custom log framework
+# CB_Looger - Custom log framework
 Salesforce logging tool powered by Platform Events and Big Objects.
 
 A log based on Big Objects that is called from apex for a variety of log needs.<br/>
@@ -22,8 +22,11 @@ To publish saved logs, use the following method:
 CB_Logger.publish();
 ```
 *this method will publish all the logs saved till this point in the running instance.
-
-the following log type are prebuilt:
+<br/>
+How to add/change log types:<br/>
+Go to "LogType" class and add or change the log enum list.
+<br/>
+The following log type are prebuilt:
 <table>
 	<thead>
 		<th>Log type</th>
@@ -61,10 +64,7 @@ the following log type are prebuilt:
 		</tr>
 	</tbody>
 </table>
-
-How to add/change log types:
-go to "LogType" class and add or change the log enum list.
-
+<br/>
 The following log methods are available:
 <table>
 	<thead>
