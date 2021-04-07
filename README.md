@@ -22,10 +22,10 @@ To publish saved logs, use the following method:
 CB_Logger.publish();
 ```
 *this method will publish all the logs saved till this point in the running instance.
-<br/>
+<br/><br/>
 How to add/change log types:<br/>
 Go to "LogType" class and add or change the log enum list.
-<br/>
+<br/><br/>
 The following log type are prebuilt:
 <table>
 	<thead>
@@ -114,7 +114,9 @@ The following log methods are available:
 		</tr>
 	</tbody>
 </table>
-
+<br/><br/>
+How to get to the Logger after installing the package?<br/>
+Go to the App Drawer -> Choose "CB_Logger".
 
 
 Install CB_Logger package in your org
