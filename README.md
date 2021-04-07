@@ -115,7 +115,8 @@ Go to "LogType" class and add or change the log enum list.
 	</tbody>
 </table>
 <br/>
-<b>How to get to the Logger after installing the package?<b/><br/>
+<b>How to get to the Logger after installing the package:<b/> 
+<br/>
 Go to the App Drawer -> Choose "CB_Logger".
 
 
