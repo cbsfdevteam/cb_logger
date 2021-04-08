@@ -7,7 +7,7 @@ In apex we can use the CB_Logger class and by calling a simple method to determi
 The log is initially a platform event which is added to a list of event logs, and we either publish immediately or at the end of the transaction (inside our trigger framework using a single call to the publish method per transaction).<br/>
 Once the event is published, the event trigger picks it up and one at a time we convert them into big objects.<br/> At this point, we make sure to add a sequence number for each log in the list, because big objects can be considered duplicates and overwrite each other if the index fields are not unique.<br/>
 The reason for publishing a platform event and not writing directly to the big object is because you cannot mix dml of sObjects with big objects.<br/> By creating a platform event, this starts a new transaction where we can commit the big objects without receiving such dml errors.<br/>
-Once the objects are committed, we can then go to the logger UI, and filter by date, log type, or subject.<br/>
+Once the objects are committed, we can then go to the CB_Logger UI, and filter by date, log type, or subject.<br/>
 You can expand the message to view all the details, and if there is something that needs to be shared with a team member you can use the email button in the UI to choose the recipient from a pre-determined list (managed via custom label) and send them a copy.<br/>
 
 Documentation
@@ -127,7 +127,7 @@ Install Package.
 
 Why we made this
 -------------
-We, the Salesforce developers team at Cellebrite, are working very hard to develop solutions and frameworks for our users (internal users and external customers). <br/>As you all know, Salesforce platform has evolved immensely in the past years, and continue to evolve and add new features with each release.<br/>
+We, the Salesforce developers team at Cellebrite, are working very hard to develop solutions, tools and frameworks for our users (internal users and external customers). <br/>As you all know, Salesforce platform has evolved immensely in the past years, and continue to evolve and add new features with each release.<br/>
 One issue we had issues with and didn’t evolve too much was logging.<br/>
 Mainly answering these questions:<br/>
 - What is happening in my org? Are the main business processes working without issues?
