@@ -1,4 +1,4 @@
-# CB_Looger - Custom log framework
+# CB_Logger - Custom log framework
 Salesforce logging tool powered by Platform Events and Big Objects.
 
 A log based on Big Objects that is called from apex for a variety of log needs.<br/>
