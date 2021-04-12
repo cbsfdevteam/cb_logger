@@ -121,7 +121,7 @@ Go to the App Drawer -> Choose "CB_Logger".
 
 Install CB_Logger package in your org
 -------------
-<a href="https://login.salesforce.com/packaging/installPackage.apexp?p0=04t4L000000gawa">
+<a href="https://login.salesforce.com/packaging/installPackage.apexp?p0=04t4L000000gawf">
 Install Package.
 </a>
 
