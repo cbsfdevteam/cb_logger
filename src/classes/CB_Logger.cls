@@ -1,11 +1,9 @@
 public with sharing class CB_Logger {
 
-    private static List<CB_LoggerBO__b> LoggerList = new List<CB_LoggerBO__b>();
     private static List<CB_LoggerPE__e> logEvents = new List<CB_LoggerPE__e>();
     private static Integer logCount = 0;
 
     public static void CleanLogList(){
-        LoggerList = new List<CB_LoggerBO__b>();
         logEvents = new List<CB_LoggerPE__e>();
     }   
 
@@ -32,13 +30,6 @@ public with sharing class CB_Logger {
     
     public static void log(LogType type, String subject, String Body){
         DateTime now = datetime.now();
-        LoggerList.add(new CB_LoggerBO__b(
-            Subject__c = subject,
-            Message__c = Body,
-            Type__c  = type.Name(),
-            Date__c = now,
-            User__c = UserInfo.getUserId()
-        ));
         logEvents.add(new CB_LoggerPE__e(
             Type__c = type.Name(),
             User__c = UserInfo.getUserId(), 

@@ -19,13 +19,19 @@
                     <c-lwc-split-view title={currentPanel}>
                         <div style="padding:5%">
                             <lightning-tabset>
-                                <lightning-tab label="Find Logs">
+                                <lightning-tab label="Filter By Date">
                                         <lightning-combobox class="combobox" label="Choose log type for query:"
                                         value={ChosenType} placeholder={ChosenType} options={typeOptions}
                                         onchange={getDataTypeBased}></lightning-combobox>
                                         <br/>
                                         <lightning-input type="date"  disabled={disabledDate} label={dateoflogtype}
                                         onchange={getDataDateBased}></lightning-input>
+                                </lightning-tab>
+                                <lightning-tab label="Query Amount">
+                                    <br/>
+                                    Amount of records queried for each log type:<b>{label.queryAmount}</b>.
+                                    <br/><br/>
+                                    - You can change the amount of records queired, by changing the Custom Label called: "Logger Query Amount".
                                 </lightning-tab>
                             </lightning-tabset>
                         </div>

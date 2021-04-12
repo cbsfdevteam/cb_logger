@@ -5,6 +5,7 @@ import getTypeList from '@salesforce/apex/CB_LoggerUI_Ctrl.getTypes';
 import deleteByType from '@salesforce/apex/CB_LoggerUI_Ctrl.clearBigObjByType';
 import SendmyEmail from '@salesforce/apex/CB_LoggerUI_Ctrl.SendEmail';
 import PremittedEmails from '@salesforce/label/c.Logger_Permitted_Emails';
+import queryAmount from '@salesforce/label/c.Logger_Query_Amount';
 import  *  as Navigation from './navigation';
 import  *  as constData from './constData';
 import  *  as tableManager  from './tableManager';
@@ -16,6 +17,9 @@ export default class Logger extends LightningElement {
     get isTypeToday() {return this.ChosenType === "";}
     get header() {return [{ label: 'Logger', value: 'Logger' } ];}
 
+    label = {
+        queryAmount
+    };
     @track data = [];
     @track modalmaintitle = "Title";
     @track ModalBody = "";

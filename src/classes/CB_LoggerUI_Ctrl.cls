@@ -3,11 +3,11 @@ public without sharing class CB_LoggerUI_Ctrl {
     @AuraEnabled
     public static List<CB_LoggerBO__b> getLoggerData(String look4Type, String look4Date){
         List<CB_LoggerBO__b> lgs = new List<CB_LoggerBO__b>();
-        if(look4Type != null && look4Type != '' && look4Date != null &&  look4Date != ''){
+        if(!String.isBlank(look4Type) && !String.isBlank(look4Date)){
             Date myfixedDate = Date.ValueOf(look4Date);
-            lgs = [SELECT id,Date__c,Type__c,Message__c,Subject__c, User__r.Name FROM CB_LoggerBO__b  WHERE Type__c =: look4Type AND Date__c >: myfixedDate AND Date__c <: myfixedDate.addDays(1) LIMIT 500];
-        }else if(look4Type != null && look4Type != ''){
-            lgs = [SELECT id,Date__c,Type__c,Message__c,Subject__c, User__r.Name FROM CB_LoggerBO__b WHERE Type__c =: look4Type LIMIT 500];
+            lgs = [SELECT id,Date__c,Type__c,Message__c,Subject__c, User__r.Name FROM CB_LoggerBO__b  WHERE Type__c =: look4Type AND Date__c >: myfixedDate AND Date__c <: myfixedDate.addDays(1) LIMIT : Integer.valueOf(Label.Logger_Query_Amount)];
+        }else if(!String.isBlank(look4Type) ){
+            lgs = [SELECT id,Date__c,Type__c,Message__c,Subject__c, User__r.Name FROM CB_LoggerBO__b WHERE Type__c =: look4Type LIMIT : Integer.valueOf(Label.Logger_Query_Amount)];
         }else{
             lgs = getTodayData();
         }
@@ -18,7 +18,7 @@ public without sharing class CB_LoggerUI_Ctrl {
         Date mydate = Date.today();
         List<CB_LoggerBO__b> daylogs = new List<CB_LoggerBO__b>();
         for (String type : getTypes()) {
-            List<CB_LoggerBO__b> typelogs = [SELECT id,Date__c,Type__c,Message__c,Subject__c, User__r.Name FROM CB_LoggerBO__b  WHERE Type__c =:type AND Date__c >=: mydate LIMIT 500];
+            List<CB_LoggerBO__b> typelogs = [SELECT id,Date__c,Type__c,Message__c,Subject__c, User__r.Name FROM CB_LoggerBO__b  WHERE Type__c =:type AND Date__c >=: mydate LIMIT : Integer.valueOf(Label.Logger_Query_Amount)];
             if(!typelogs.isEmpty()) {
                 daylogs.addAll(typelogs);
             }
