@@ -1,5 +1,6 @@
 # CB_Logger - Custom log framework
-Salesforce logging tool powered by Platform Events and Big Objects.
+Salesforce logging tool powered by Platform Events and Big Objects.<br/>
+[![Youtube Video](https://img.youtube.com/vi/5IjjTvt1Hlk/0.jpg)](https://www.youtube.com/watch?v=5IjjTvt1Hlk)
 
 A log based on Big Objects that is called from apex for a variety of log needs.<br/>
 “SUCCESS”, “FAIL”, “LOG”, “CALLOUT_RETRY”, “EXCEPTION” and more….<br/>
@@ -10,14 +11,11 @@ The reason for publishing a platform event and not writing directly to the big o
 Once the objects are committed, we can then go to the CB_Logger UI, and filter by date, log type, or subject.<br/>
 You can expand the message to view all the details, and if there is something that needs to be shared with a team member you can use the email button in the UI to choose the recipient from a pre-determined list (managed via custom label) and send them a copy.<br/>
 
-
-New Features
+Install CB_Logger package in your org
 -------------
-Version 1.6:<br/>
-* New "Live Mode": a new mode in the logger, accessible via toggle button in UI, that displays platform event logs that arent been saved as big object records.
-This feature allows you to get logs live, making debugging easier without the standard trace-log process.<br/>
-* Invocable method: a new log type allows you to create a log in flows.<br/>
-
+<a href="https://login.salesforce.com/packaging/installPackage.apexp?p0=04t4L000000gdRN">
+Install Package.
+</a>
 
 Documentation
 -------------
@@ -79,6 +77,7 @@ The following log methods are available:
 	<thead>
 		<th>Type</th>
     <th>method</th>
+<th>Comments</th>
 	</thead>
 	<tbody>
 		<tr>
@@ -88,6 +87,9 @@ The following log methods are available:
 			<td>
 				log(LogType type, String subject, String Body);
 			</td>
+			<td>
+				Adds a new platform event object to the prepublished list. *You can specify the log type.
+			</td>
 		</tr>
 		<tr>
 			<td>
@@ -95,6 +97,9 @@ The following log methods are available:
 			</td>
 			<td>
 				log(String type, String Body);
+			</td>
+			<td>
+				Adds a new platform event object with Type set to "LOG" to the prepublished list.
 			</td>
 		</tr>	
 		<tr>
@@ -104,6 +109,9 @@ The following log methods are available:
 			<td>
         error(String Subject, Object Body);
 			</td>
+						<td>
+				Adds a new platform event object with Type set to "ERROR" to the prepublished list.
+			</td>
 		</tr>	
 		<tr>
 			<td>
@@ -111,6 +119,9 @@ The following log methods are available:
 			</td>
 			<td>
         alert(String Subject, Object Body);
+			</td>
+						<td>
+				Adds a new platform event object with Type set to "ALERT" to the prepublished list.
 			</td>
 		</tr>
     		<tr>
@@ -120,6 +131,9 @@ The following log methods are available:
 			<td>
         success(String Subject, Object Body);
 			</td>
+			<td>
+				Adds a new platform event object with Type set to "SUCCESS" to the prepublished list.
+			</td>
 		</tr>
 		    		<tr>
 			<td>
@@ -127,6 +141,9 @@ The following log methods are available:
 			</td>
 			<td>
         live(String Subject, Object Body);
+			</td>
+			<td>
+				Publish immediately a new Platform Event object with Type set to "LIVE". *for type "LIVE" logs,no Big Object record will be created.
 			</td>
 		</tr>
 	<tr>
@@ -136,6 +153,20 @@ The following log methods are available:
 			<td>
         InvocableLog(List<String> params);
 			</td>
+			<td>
+				An Invocable method that allows you to create logs from flows. In order to use this method, you send in the parameter a List of Strings, each String contains the following: <br/> [Type]~[Subject]~[Message]<br/> The method splits the String for each '~' and builds a Platform Event from the resulted list.
+			</td>
+		</tr>
+		    		<tr>
+			<td>
+        publish
+			</td>
+			<td>
+        publish();
+			</td>
+			<td>
+				Publish immediately the prepublished list.
+			</td>
 		</tr>
 	</tbody>
 </table>
@@ -144,11 +175,13 @@ How to get to the Logger after installing the package:<br/>
 Go to the App Drawer -> Choose "CB_Logger".
 
 
-Install CB_Logger package in your org
+New Features
 -------------
-<a href="https://login.salesforce.com/packaging/installPackage.apexp?p0=04t4L000000gdRN">
-Install Package.
-</a>
+Version 1.6:<br/>
+* New "Live Mode": a new mode in the logger, accessible via toggle button in UI, that displays platform event logs that arent been saved as big object records.
+This feature allows you to get logs live, making debugging easier without the standard trace-log process.<br/>
+* Invocable method: a new log type allows you to create a log in flows.<br/>
+
 
 Why we made this
 -------------
