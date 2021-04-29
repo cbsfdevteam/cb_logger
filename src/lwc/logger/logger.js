@@ -9,14 +9,16 @@ import queryAmount from '@salesforce/label/c.Logger_Query_Amount';
 import  *  as Navigation from './navigation';
 import  *  as constData from './constData';
 import  *  as tableManager  from './tableManager';
-
+import { subscribe, unsubscribe, onError, setDebugFlag, isEmpEnabled } from 'lightning/empApi';
 export default class Logger extends LightningElement {
-
+    liveButtonText = "Go Live Logger"
     get tableColums(){return constData.tableColumns;}
     get dateoflogtype() {return `show  ${this.ChosenType} logs on specific date:`;}
     get isTypeToday() {return this.ChosenType === "";}
-    get header() {return [{ label: 'Logger', value: 'Logger' } ];}
-
+    header = [{ label: 'Logger', value: 'Logger' },{ label: 'Big Object', value: 'Big Object' } ];
+    channelName = '/event/CB_LoggerPE__e';
+    subscription = {};
+    @track isLive = false;
     label = {
         queryAmount
     };
@@ -204,6 +206,10 @@ export default class Logger extends LightningElement {
         }
     }
 
+    clearLives(){
+        this.data = [];
+    }
+
     //getDataTypeBased - tells server to limit records to selected certain type.
     getDataTypeBased(event) {
         this.ChosenType = event.target.value;
@@ -387,8 +393,65 @@ export default class Logger extends LightningElement {
     StartLoading(){
         this.loaded = false;
     }
+
     //end loading screen
     EndLoading(){
         this.loaded = true;
+    }
+
+    // Handles subscribe to platform event
+    handleSubscribe() {
+        // Callback invoked whenever a new event message is received
+        const messageCallback = (response)=> {
+            console.log('New message received: ', JSON.stringify(response));
+            let currentData = this.data;
+            currentData.push(tableManager.buildRow(response.data.payload));
+            currentData =  tableManager.sortTableBy(currentData,this.sortedBy);
+            this.data = JSON.parse(JSON.stringify(currentData));
+        };
+
+        // Invokes subscribe method of empApi.
+        subscribe(this.channelName, -1, messageCallback).then(response => {
+            this.showToast("Subscription", "Subscription request sent to: "+JSON.stringify(response.channel), "Success");
+            this.subscription = response;
+        });
+    }
+
+    // Handles unsubscribe to platform event
+    handleUnsubscribe() {
+        // Invokes unsubscribe method of empApi
+        unsubscribe(this.subscription, response => {
+        });
+    }
+
+    // updates blueCard cmp's header
+    switchHeader(value2change,newvalue){
+        let tempHeaders = [];
+        this.header.forEach(head => {
+            if(head.value === value2change){
+                tempHeaders.push({label:newvalue,value:newvalue});
+                return;
+            }
+            tempHeaders.push(head);
+        });
+        this.header = tempHeaders;
+    }
+
+    // switch between Live Mode to Big Object Mode.
+    switchLoggerType(event){
+        if(event.detail === true){
+            this.isLive = false;
+            this.liveButtonText = "Go Live Logger";
+            this.handleUnsubscribe();
+            this.switchHeader("Live Mode","Big Object");
+            this.updateData(false,this.checkFilterSubject(),this.checkUserSubject());
+        }else{
+            this.isLive = true;
+            this.liveButtonText = "Go Big Object Logger";
+            this.data = [];
+            this.Backdata = [];
+            this.switchHeader("Big Object","Live Mode");
+            this.handleSubscribe();
+        }
     }
 }

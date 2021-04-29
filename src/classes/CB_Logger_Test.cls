@@ -37,6 +37,21 @@ private class CB_Logger_Test {
     }
 
     @isTest
+    private static void test_livelogs() {
+        CB_Logger.live('alert','test');
+    }
+
+    @isTest
+    private static void test_Invocablelogs() {
+        List<String> params = new List<String>();
+        params.add('test~test1~test1');
+        params.add('test~test2~test2');
+        Test.startTest();
+        CB_Logger.InvocableLog(params);
+        Test.stopTest();
+    }
+
+    @isTest
     private static void test_errorlogs() {
         CB_Logger.error('error','test');
         CB_Logger.publish();

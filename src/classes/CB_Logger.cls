@@ -5,7 +5,20 @@ public with sharing class CB_Logger {
 
     public static void CleanLogList(){
         logEvents = new List<CB_LoggerPE__e>();
-    }   
+    } 
+
+    public static void live(String Subject, Object Body){
+        DateTime now = datetime.now();
+        logEvents.add(new CB_LoggerPE__e(
+            Type__c = 'LIVE',
+            User__c = UserInfo.getUserId(), 
+            Subject__c = Subject,
+            Date__c = now,
+            Message__c = String.valueOf(Body),
+            Count__c = logCount++
+        ));
+        publish();
+    }
 
     public static void success(String Subject, Object Body){
         log(LogType.SUCCESS, Subject,String.valueOf(Body));
@@ -26,6 +39,27 @@ public with sharing class CB_Logger {
     //wont be shown in the UI, no subject.
     public static void log(LogType type, String Body){
         log(type, null, Body);
+    }
+
+    @InvocableMethod(label='InvocableLog' description='Create logs from flow, this method will publish the platform event immediately. send type,subject and body in the same String value seperated by "~".')
+    public static void InvocableLog(List<String> params){
+        DateTime now = datetime.now();
+        for (String stringlog : params) {
+            List<String> splittedParams = stringlog.split('~');
+            if(splittedParams.size() != 3){
+                error('InvocableLog','Error when seperating the String parameter, please make sure you seperated the topic,subject and body with "~" correctly. <br/> Failed on String: '+stringlog);
+            }else{
+                logEvents.add(new CB_LoggerPE__e(
+                    Type__c = splittedParams[0],
+                    User__c = UserInfo.getUserId(), 
+                    Subject__c = splittedParams[1],
+                    Date__c = now,
+                    Message__c = splittedParams[2],
+                    Count__c = logCount++
+                ));
+            }
+        }
+        publish();
     }
     
     public static void log(LogType type, String subject, String Body){

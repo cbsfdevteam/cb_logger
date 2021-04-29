@@ -51,7 +51,9 @@ export function buildRow(row){
         } else {
             rowData.User__c = "";
         }
-    } else {
+    } else if (row.User__c != undefined){
+        rowData.User__c = row.User__c;
+    }else{
         rowData.User__c = "";
     }
     rowData.User__r = row.User__r;
@@ -101,5 +103,8 @@ function GetTypeColor(type) {
 
         case 'CALLOUT_SUCCESS':
             return 'slds-icon-custom-custom20';
+            
+        case 'LIVE':
+            return 'slds-icon-custom-custom25';
     }
 }

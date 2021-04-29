@@ -1,42 +1,50 @@
 <template>
     <c-lwc-blue-card headers={header}>
         <div slot="subheaderleft">
-            <!-- subheader left area for buttons -->
+            <c-lwc-toggle value=false truename="Live" falsename="Big Object" onchange={switchLoggerType} ></c-lwc-toggle>
         </div>
         <div slot="subheaderright">
-            <button class="slds-button slds-button_neutral" onclick={refresh}
-            style="float: right;display: table-cell;vertical-align: middle;">Refresh</button>
-            &nbsp; 
-            <lightning-combobox variant = "label-hidden" style="float: right;display: table-cell;vertical-align: middle;margin-right: 10px;" placeholder="Amount of Records" options={comboBoxOptions} onchange={changeSumOfRecords} ></lightning-combobox>
-            &nbsp; 
-            <lightning-combobox variant = "label-hidden" style="float: right;display: table-cell;vertical-align: middle;margin-right: 10px;" placeholder="Filter by Type" options={typeOptions} onchange={getDataTypeBased} ></lightning-combobox>
-            <c-lwc-lookup listdata={subjectOptions4Lookup} onselected={FilterSubjects} placeholder="Filter by Subject" style="float: right;display: table-cell;vertical-align: middle;margin-right: 10px;"></c-lwc-lookup>
-            <c-lwc-lookup listdata={userOptions4Lookup} onselected={FilterUser} placeholder="Filter by User" style="float: right;display: table-cell;vertical-align: middle;margin-right: 10px;"></c-lwc-lookup>
+            <template if:false={isLive}>
+                <button class="slds-button slds-button_neutral" onclick={refresh}
+                style="float: right;display: table-cell;vertical-align: middle;">Refresh</button>
+                &nbsp; 
+                <lightning-combobox variant = "label-hidden" style="float: right;display: table-cell;vertical-align: middle;margin-right: 10px;" placeholder="Amount of Records" options={comboBoxOptions} onchange={changeSumOfRecords} ></lightning-combobox>
+                &nbsp; 
+                <lightning-combobox variant = "label-hidden" style="float: right;display: table-cell;vertical-align: middle;margin-right: 10px;" placeholder="Filter by Type" options={typeOptions} onchange={getDataTypeBased} ></lightning-combobox>
+                <c-lwc-lookup listdata={subjectOptions4Lookup} onselected={FilterSubjects} placeholder="Filter by Subject" style="float: right;display: table-cell;vertical-align: middle;margin-right: 10px;"></c-lwc-lookup>
+                <c-lwc-lookup listdata={userOptions4Lookup} onselected={FilterUser} placeholder="Filter by User" style="float: right;display: table-cell;vertical-align: middle;margin-right: 10px;"></c-lwc-lookup>
+            </template>
+            <template if:true={isLive}>
+                <button class="slds-button slds-button_neutral" onclick={clearLives}
+                style="float: right;display: table-cell;vertical-align: middle;">Clear</button>
+            </template>
         </div>
         <div slot="body">
             <div class="slds-grid" >
-                <div class="slds-col">
-                    <c-lwc-split-view title={currentPanel}>
-                        <div style="padding:5%">
-                            <lightning-tabset>
-                                <lightning-tab label="Filter By Date">
-                                        <lightning-combobox class="combobox" label="Choose log type for query:"
-                                        value={ChosenType} placeholder={ChosenType} options={typeOptions}
-                                        onchange={getDataTypeBased}></lightning-combobox>
+                <template if:false={isLive}>
+                    <div class="slds-col">
+                        <c-lwc-split-view title={currentPanel}>
+                            <div style="padding:5%">
+                                <lightning-tabset>
+                                    <lightning-tab label="Filter By Date">
+                                            <lightning-combobox class="combobox" label="Choose log type for query:"
+                                            value={ChosenType} placeholder={ChosenType} options={typeOptions}
+                                            onchange={getDataTypeBased}></lightning-combobox>
+                                            <br/>
+                                            <lightning-input type="date"  disabled={disabledDate} label={dateoflogtype}
+                                            onchange={getDataDateBased}></lightning-input>
+                                    </lightning-tab>
+                                    <lightning-tab label="Query Amount">
                                         <br/>
-                                        <lightning-input type="date"  disabled={disabledDate} label={dateoflogtype}
-                                        onchange={getDataDateBased}></lightning-input>
-                                </lightning-tab>
-                                <lightning-tab label="Query Amount">
-                                    <br/>
-                                    Amount of records queried for each log type:<b>{label.queryAmount}</b>.
-                                    <br/><br/>
-                                    - You can change the amount of records queired, by changing the Custom Label called: "Logger Query Amount".
-                                </lightning-tab>
-                            </lightning-tabset>
-                        </div>
-                    </c-lwc-split-view>
-                </div>
+                                        Amount of records queried for each log type:<b>{label.queryAmount}</b>.
+                                        <br/><br/>
+                                        - You can change the amount of records queired, by changing the Custom Label called: "Logger Query Amount".
+                                    </lightning-tab>
+                                </lightning-tabset>
+                            </div>
+                        </c-lwc-split-view>
+                    </div>
+                </template>
                 <div class="slds-col" style="overflow-x: scroll;">
                     <div class="slds-p-horizontal_small" style="margin-bottom: 10px;">
                         <lightning-datatable data={data} hide-checkbox-column columns={tableColums} key-field="id" 
@@ -54,15 +62,17 @@
     </template>
     <c-lwc-footer style="vertical-align: middle;">
         <span>
-            <button class="slds-button slds-button_neutral" disabled={isFirstPage} onclick={goFirstPage}> &lt;&lt;
-            </button>
-            <button class="slds-button slds-button_neutral" disabled={isFirstPage} onclick={goPrevPage}> &lt;
-            </button>
-            &nbsp; Page ({currentPageNumber} of {Pages}) &nbsp;
-            <button class="slds-button slds-button_neutral" disabled={isLastPage} onclick={goNextPage}> &gt;
-            </button>
-            <button class="slds-button slds-button_neutral" disabled={isLastPage} onclick={goLastPage}> &gt;&gt;
-            </button>
+            <template if:false={isLive}>
+                <button class="slds-button slds-button_neutral" disabled={isFirstPage} onclick={goFirstPage}> &lt;&lt;
+                </button>
+                <button class="slds-button slds-button_neutral" disabled={isFirstPage} onclick={goPrevPage}> &lt;
+                </button>
+                &nbsp; Page ({currentPageNumber} of {Pages}) &nbsp;
+                <button class="slds-button slds-button_neutral" disabled={isLastPage} onclick={goNextPage}> &gt;
+                </button>
+                <button class="slds-button slds-button_neutral" disabled={isLastPage} onclick={goLastPage}> &gt;&gt;
+                </button>
+            </template>
         </span>
     </c-lwc-footer>
     <c-lwc-modal modaltitle={modalmaintitle} hideclosebutton={hideclosebutton} addscrolls=true>
