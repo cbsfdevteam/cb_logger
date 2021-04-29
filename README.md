@@ -10,6 +10,15 @@ The reason for publishing a platform event and not writing directly to the big o
 Once the objects are committed, we can then go to the CB_Logger UI, and filter by date, log type, or subject.<br/>
 You can expand the message to view all the details, and if there is something that needs to be shared with a team member you can use the email button in the UI to choose the recipient from a pre-determined list (managed via custom label) and send them a copy.<br/>
 
+
+New Features
+-------------
+Version 1.6:<br/>
+* New "Live Mode": a new mode in the logger, accessible via toggle button in UI, that displays platform event logs that arent been saved as big object records.
+This feature allows you to get logs live, making debugging easier without the standard trace-log process.<br/>
+* Invocable method: a new log type allows you to create a log in flows.<br/>
+
+
 Documentation
 -------------
 To log a custom log, use the following method:
@@ -98,7 +107,7 @@ The following log methods are available:
 		</tr>	
 		<tr>
 			<td>
-        ALERT
+        alert
 			</td>
 			<td>
         alert(String Subject, Object Body);
@@ -112,6 +121,22 @@ The following log methods are available:
         success(String Subject, Object Body);
 			</td>
 		</tr>
+		    		<tr>
+			<td>
+        live
+			</td>
+			<td>
+        live(String Subject, Object Body);
+			</td>
+		</tr>
+	<tr>
+			<td>
+        Invocable
+			</td>
+			<td>
+        InvocableLog(List<String> params);
+			</td>
+		</tr>
 	</tbody>
 </table>
 <br/>
@@ -121,7 +146,7 @@ Go to the App Drawer -> Choose "CB_Logger".
 
 Install CB_Logger package in your org
 -------------
-<a href="https://login.salesforce.com/packaging/installPackage.apexp?p0=04t4L000000gawf">
+<a href="https://login.salesforce.com/packaging/installPackage.apexp?p0=04t4L000000gdRN">
 Install Package.
 </a>
 
