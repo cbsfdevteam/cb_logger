@@ -1,0 +1,111 @@
+<template>
+    <c-cb-blue-card headers={header}>
+        <div slot="subheaderleft">
+            <c-cb-toggle value=false truename="Live" falsename="Big Object" onchange={switchLoggerType} ></c-cb-toggle>
+        </div>
+        <div slot="subheaderright">
+            <template if:false={isLive}>
+                <button class="slds-button slds-button_neutral" onclick={refresh}
+                style="float: right;display: table-cell;vertical-align: middle;">Refresh</button>
+                &nbsp; 
+                <lightning-combobox variant = "label-hidden" style="float: right;display: table-cell;vertical-align: middle;margin-right: 10px;" placeholder="Amount of Records" options={comboBoxOptions} onchange={changeSumOfRecords} ></lightning-combobox>
+                &nbsp; 
+                <lightning-combobox variant = "label-hidden" style="float: right;display: table-cell;vertical-align: middle;margin-right: 10px;" placeholder="Filter by Type" options={typeOptions} onchange={getDataTypeBased} ></lightning-combobox>
+                <c-cb-lookup listdata={subjectOptions4Lookup} onselected={FilterSubjects} placeholder="Filter by Subject" style="float: right;display: table-cell;vertical-align: middle;margin-right: 10px;"></c-cb-lookup>
+                <c-cb-lookup listdata={userOptions4Lookup} onselected={FilterUser} placeholder="Filter by User" style="float: right;display: table-cell;vertical-align: middle;margin-right: 10px;"></c-cb-lookup>
+            </template>
+            <template if:true={isLive}>
+                <button class="slds-button slds-button_neutral" onclick={clearLives}
+                style="float: right;display: table-cell;vertical-align: middle;">Clear</button>
+            </template>
+        </div>
+        <div slot="body">
+            <div class="slds-grid" >
+                <template if:false={isLive}>
+                    <div class="slds-col">
+                        <c-cb-split-view title={currentPanel}>
+                            <div style="padding:5%">
+                                <lightning-tabset>
+                                    <lightning-tab label="Filter By Date">
+                                            <lightning-combobox class="combobox" label="Choose log type for query:"
+                                            value={ChosenType} placeholder={ChosenType} options={typeOptions}
+                                            onchange={getDataTypeBased}></lightning-combobox>
+                                            <br/>
+                                            <lightning-input type="date"  disabled={disabledDate} label={dateoflogtype}
+                                            onchange={getDataDateBased}></lightning-input>
+                                            <br/>
+                                            <c-cb-time-picker value={newStartTime} onchange={getDataDateStartTimeBased} style="display: inline-block;margin-right: 10%;" label="From:" disabled={disabledTime}></c-cb-time-picker>
+                                            <c-cb-time-picker value={newEndTime} onchange={getDataDateEndTimeBased} style="display: inline-block;" label="Till:" disabled={disabledTime}></c-cb-time-picker>
+                                    </lightning-tab>
+                                    <lightning-tab label="Query Amount">
+                                        <br/>
+                                        Amount of records queried for each log type:<b>{label.queryAmount}</b>.
+                                        <br/><br/>
+                                        - You can change the amount of records queired, by changing the Custom Label called: "Logger Query Amount".
+                                    </lightning-tab>
+                                </lightning-tabset>
+                            </div>
+                        </c-cb-split-view>
+                    </div>
+                </template>
+                <div class="slds-col" style="overflow-x: scroll;">
+                    <div class="slds-p-horizontal_small" style="margin-bottom: 10px;">
+                        <lightning-datatable data={data} hide-checkbox-column columns={tableColums} key-field="id" 
+                            class="cols table" default-sort-direction={defaultSortDirection} sorted-direction={sortDirection}
+                            sorted-by={sortedBy}  onrowaction={handleRowAction} >
+                        </lightning-datatable>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </c-cb-blue-card>
+    <br/><br/><br/>
+    <template if:false={loaded}>
+        <lightning-spinner alternative-text="Loading"></lightning-spinner>
+    </template>
+    <c-cb-footer style="vertical-align: middle;">
+        <span>
+            <template if:false={isLive}>
+                <button class="slds-button slds-button_neutral" disabled={isFirstPage} onclick={goFirstPage}> &lt;&lt;
+                </button>
+                <button class="slds-button slds-button_neutral" disabled={isFirstPage} onclick={goPrevPage}> &lt;
+                </button>
+                &nbsp; Page ({currentPageNumber} of {Pages}) &nbsp;
+                <button class="slds-button slds-button_neutral" disabled={isLastPage} onclick={goNextPage}> &gt;
+                </button>
+                <button class="slds-button slds-button_neutral" disabled={isLastPage} onclick={goLastPage}> &gt;&gt;
+                </button>
+            </template>
+        </span>
+    </c-cb-footer>
+    <c-cb-modal modaltitle={modalmaintitle} hideclosebutton={hideclosebutton} addscrolls=true>
+        <div slot="modalbody">
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size_4-of-6">
+                    <template if:true={BodyisHTML}>
+                        <lightning-formatted-rich-text  value={ModalBody}></lightning-formatted-rich-text>
+                    </template>
+                    <template if:false={BodyisHTML}>
+                        <lightning-formatted-text  value={ModalBody}></lightning-formatted-text>
+                    </template>
+                </div>
+                <template if:true={ClickedSend2Email}>
+                    <div class="slds-col slds-size_2-of-6">
+                        <lightning-combobox name="Email" label="Email" value={ClientEmailvalue} placeholder="Select Email"
+                            options={Emails} onchange={EmailhandleChange} required></lightning-combobox>
+                        <br/>
+                        <br/>
+                            <button type="button" onclick={Send2Email}
+                                class="slds-button slds-button_brand slds-m-right_medium">Cancel</button>
+                            <button type="button" onclick={SendEmail}
+                                class="slds-button slds-button_brand slds-m-right_medium">Send</button>
+                    </div>
+                </template>
+            </div>
+        </div>
+        <div slot="modalfooter">
+            <button type="button" onclick={Send2Email} class="slds-button slds-button_brand slds-m-right_medium">Send as
+                Email</button>
+        </div>
+    </c-cb-modal>
+</template>

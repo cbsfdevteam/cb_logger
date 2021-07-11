@@ -7,11 +7,4 @@
         <shortDescription>Logger_Permitted_Emails</shortDescription>
         <value>MR.DUMMY.MAIL@DELETEME.com</value>
     </labels>
-    <labels>
-        <fullName>Logger_Query_Amount</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>Logger Query Amount</shortDescription>
-        <value>500</value>
-    </labels>
 </CustomLabels>
