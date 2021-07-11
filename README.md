@@ -13,7 +13,7 @@ You can expand the message to view all the details, and if there is something th
 
 Install CB_Logger package in your org
 -------------
-<a href="https://login.salesforce.com/packaging/installPackage.apexp?p0=04t4L000000gdRN">
+<a href="https://login.salesforce.com/packaging/installPackage.apexp?p0=04t4L000000ghJy">
 Install Package.
 </a>
 
@@ -177,6 +177,10 @@ Go to the App Drawer -> Choose "CB_Logger".
 
 New Features
 -------------
+Version 1.7 - 1.9:<br/>
+* Changed lwc names to include "cb" prefix.<br/>
+* New "Time Filter" option when filtering via dates.<br/>
+
 Version 1.6:<br/>
 * New "Live Mode": a new mode in the logger, accessible via toggle button in UI, that displays platform event logs that arent been saved as big object records.
 This feature allows you to get logs live, making debugging easier without the standard trace-log process.<br/>
