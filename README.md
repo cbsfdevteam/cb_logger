@@ -13,7 +13,7 @@ You can expand the message to view all the details, and if there is something th
 
 Install CB_Logger package in your org
 -------------
-<a href="https://login.salesforce.com/packaging/installPackage.apexp?p0=04t4L000000ghJy">
+<a href="https://login.salesforce.com/packaging/installPackage.apexp?p0=04t4L0000000tGh">
 Install Package.
 </a>
 
@@ -107,7 +107,9 @@ The following log methods are available:
         error
 			</td>
 			<td>
-        error(String Subject, Object Body);
+        - error(String Subject, Object Body);
+								<br/>
+- error(String Subject, Exception e);
 			</td>
 						<td>
 				Adds a new platform event object with Type set to "ERROR" to the prepublished list.
@@ -140,7 +142,9 @@ The following log methods are available:
         live
 			</td>
 			<td>
-        live(String Subject, Object Body);
+        - live(String Subject, Object Body);
+				<br/>
+- live(Object Body);
 			</td>
 			<td>
 				Publish immediately a new Platform Event object with Type set to "LIVE". *for type "LIVE" logs,no Big Object record will be created.
@@ -177,6 +181,12 @@ Go to the App Drawer -> Choose "CB_Logger".
 
 New Features
 -------------
+Version 1.10:<br/>
+* New log for exceptions.  <br/> CB_Logger.error(String Subject, Exception e)<br/>
+* New short live log. <br/> CB_Logger.live(Object Body)<br/>
+* New message filter option.
+* Added support for multiple logs, now will join logs with the same subject, minimizing the amount of platform events used on single instance.
+
 Version 1.7 - 1.9:<br/>
 * Changed lwc names to include "cb" prefix.<br/>
 * New "Time Filter" option when filtering via dates.<br/>
