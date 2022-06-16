@@ -12,27 +12,28 @@ private class CB_LoggerUI_Test {
     }
 
     @isTest
-    private static void test_deletelogs() {
-        CB_LoggerUI_Ctrl.clearBigObjByType('LOG');
-    }
-
-    @isTest
     private static void test_getlogTypes() {
         CB_LoggerUI_Ctrl.getTypes();
     }
 
+
     @isTest
     private static void test_getTodaylogs() {
-        CB_LoggerUI_Ctrl.getTodayData();
+        CB_LoggerUI_Ctrl.getTodayData('CB_LoggerBO__b',100);
     }
 
     @isTest
-    private static void test_getlogs_logstoday() {
-        CB_LoggerUI_Ctrl.getLoggerData('LOG',String.valueOf(Date.today()));
+    private static void test_getlogs_logstodayTime() {
+        CB_LoggerUI_Ctrl.getLoggerData('LOG',String.valueOf(Date.today())+' 18:00:00 12:00:12','CB_LoggerBO__b',100);
     }
 
     @isTest
     private static void test_getlogs_logs() {
-        CB_LoggerUI_Ctrl.getLoggerData('LOG',null);
+        CB_LoggerUI_Ctrl.getLoggerData(null,null,'CB_LoggerBO__b',100);
+    }
+
+    @isTest
+    private static void test_getlogs_logs2() {
+        CB_LoggerUI_Ctrl.getLoggerData('LOG',null,'CB_LoggerBO__b',100);
     }
 }

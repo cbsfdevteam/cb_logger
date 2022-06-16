@@ -1,42 +1,51 @@
 public without sharing class CB_LoggerUI_Ctrl {
 
     @AuraEnabled
-    public static List<CB_LoggerBO__b> getLoggerData(String look4Type, String look4Date){
-        List<CB_LoggerBO__b> lgs = new List<CB_LoggerBO__b>();
+    public static List<SObject> getLoggerData(String look4Type, String look4Date, String bigObjectType,Integer queryAmount){
+        Integer limitOfRecords = queryAmount;
+        string logQuery = '';
+        Date myfixedDate;
+        Datetime myfixedDateAndStartTime;
+        Datetime myfixedDateAndEndTime;
+        List<String> splittedlook4Date;
+        Date myfixedDateNoTime;
+        List<SObject> lgs = new List<SObject>();
         if(!String.isBlank(look4Type) && !String.isBlank(look4Date)){
             if(look4Date.split(' ').size() == 1){
-                Date myfixedDate = Date.ValueOf(look4Date);
-                lgs = [SELECT id,Date__c,Type__c,Message__c,Subject__c, User__r.Name FROM CB_LoggerBO__b  WHERE Type__c =: look4Type AND Date__c >: myfixedDate AND Date__c <: myfixedDate.addDays(1) LIMIT : Integer.valueOf(Label.Logger_Query_Amount)];
+                myfixedDate = Date.ValueOf(look4Date);
+                logQuery = 'SELECT id,Date__c,Type__c,Message__c,Subject__c, User__r.Name FROM '+bigObjectType+'  WHERE Type__c =: look4Type AND Date__c >: myfixedDate AND Date__c <: myfixedDate.addDays(1) LIMIT : limitOfRecords';
             }else if(look4Date.split(' ').size() == 2) {
-                List<String> splittedlook4Date = look4Date.split(' ');
-                Datetime myfixedDateAndStartTime = DateTime.newInstance(Date.valueOf(splittedlook4Date[0]).year(), Date.valueOf(splittedlook4Date[0]).month(), Date.valueOf(splittedlook4Date[0]).day(), Integer.valueOf(splittedlook4Date[1].split(':')[0])-2, Integer.valueOf(splittedlook4Date[1].split(':')[1]), 0);
-                Date myfixedDateNoTime = Date.ValueOf(splittedlook4Date[0]);
-                lgs = [SELECT id,Date__c,Type__c,Message__c,Subject__c, User__r.Name FROM CB_LoggerBO__b  WHERE Type__c =: look4Type AND Date__c >: myfixedDateAndStartTime AND Date__c <: myfixedDateNoTime.addDays(1) LIMIT : Integer.valueOf(Label.Logger_Query_Amount)];
+                splittedlook4Date = look4Date.split(' ');
+                myfixedDateAndStartTime = DateTime.newInstance(Date.valueOf(splittedlook4Date[0]).year(), Date.valueOf(splittedlook4Date[0]).month(), Date.valueOf(splittedlook4Date[0]).day(), Integer.valueOf(splittedlook4Date[1].split(':')[0])-2, Integer.valueOf(splittedlook4Date[1].split(':')[1]), 0);
+                myfixedDateNoTime = Date.ValueOf(splittedlook4Date[0]);
+                logQuery = 'SELECT id,Date__c,Type__c,Message__c,Subject__c, User__r.Name FROM '+bigObjectType+'  WHERE Type__c =: look4Type AND Date__c >: myfixedDateAndStartTime AND Date__c <: myfixedDateNoTime.addDays(1) LIMIT : limitOfRecords';
             }else{
-                List<String> splittedlook4Date = look4Date.split(' ');
-                Datetime myfixedDateAndStartTime;
+                splittedlook4Date = look4Date.split(' ');
                 if(!String.isBlank(splittedlook4Date[1])){
                      myfixedDateAndStartTime = DateTime.newInstance(Date.valueOf(splittedlook4Date[0]).year(), Date.valueOf(splittedlook4Date[0]).month(), Date.valueOf(splittedlook4Date[0]).day(), Integer.valueOf(splittedlook4Date[1].split(':')[0])-2, Integer.valueOf(splittedlook4Date[1].split(':')[1]), 0);
                 }else{
                      myfixedDateAndStartTime = DateTime.newInstance(Date.valueOf(splittedlook4Date[0]).year(), Date.valueOf(splittedlook4Date[0]).month(), Date.valueOf(splittedlook4Date[0]).day(), 0, 0, 0);
                 }
-                Datetime myfixedDateAndEndTime = DateTime.newInstance(Date.valueOf(splittedlook4Date[0]).year(), Date.valueOf(splittedlook4Date[0]).month(), Date.valueOf(splittedlook4Date[0]).day(), Integer.valueOf(splittedlook4Date[2].split(':')[0])-2, Integer.valueOf(splittedlook4Date[2].split(':')[1]), 0);
-                lgs = [SELECT id,Date__c,Type__c,Message__c,Subject__c, User__r.Name FROM CB_LoggerBO__b  WHERE Type__c =: look4Type AND Date__c >: myfixedDateAndStartTime AND Date__c <: myfixedDateAndEndTime LIMIT : Integer.valueOf(Label.Logger_Query_Amount)];
+                myfixedDateAndEndTime = DateTime.newInstance(Date.valueOf(splittedlook4Date[0]).year(), Date.valueOf(splittedlook4Date[0]).month(), Date.valueOf(splittedlook4Date[0]).day(), Integer.valueOf(splittedlook4Date[2].split(':')[0])-2, Integer.valueOf(splittedlook4Date[2].split(':')[1]), 0);
+                logQuery = 'SELECT id,Date__c,Type__c,Message__c,Subject__c, User__r.Name FROM '+bigObjectType+'  WHERE Type__c =: look4Type AND Date__c >: myfixedDateAndStartTime AND Date__c <: myfixedDateAndEndTime LIMIT : limitOfRecords';
             }
-          
         }else if(!String.isBlank(look4Type) ){
-            lgs = [SELECT id,Date__c,Type__c,Message__c,Subject__c, User__r.Name FROM CB_LoggerBO__b WHERE Type__c =: look4Type LIMIT : Integer.valueOf(Label.Logger_Query_Amount)];
+            logQuery = 'SELECT id,Date__c,Type__c,Message__c,Subject__c, User__r.Name FROM '+bigObjectType+' WHERE Type__c =: look4Type LIMIT : limitOfRecords';
         }else{
-            lgs = getTodayData();
+            return lgs = getTodayData(bigObjectType,limitOfRecords);
         }
+        lgs = Database.query(logQuery);
+
         return lgs;
     }
 
-    public static List<CB_LoggerBO__b> getTodayData(){
+    public static List<SObject> getTodayData(String bigObjectType,Integer queryAmount){
+        Integer limitOfRecords = queryAmount;
         Date mydate = Date.today();
-        List<CB_LoggerBO__b> daylogs = new List<CB_LoggerBO__b>();
+        List<SObject> daylogs = new List<SObject>();
         for (String type : getTypes()) {
-            List<CB_LoggerBO__b> typelogs = [SELECT id,Date__c,Type__c,Message__c,Subject__c, User__r.Name FROM CB_LoggerBO__b  WHERE Type__c =:type AND Date__c >=: mydate LIMIT : Integer.valueOf(Label.Logger_Query_Amount)];
+            string myquery = 'SELECT id,Date__c,Type__c,Message__c,Subject__c, User__r.Name FROM '+bigObjectType+'  WHERE Type__c =:type AND Date__c >=: mydate LIMIT : limitOfRecords';
+            List<SObject> typelogs = Database.query(myquery);
             if(!typelogs.isEmpty()) {
                 daylogs.addAll(typelogs);
             }
@@ -54,10 +63,8 @@ public without sharing class CB_LoggerUI_Ctrl {
     }
 
     @AuraEnabled
-    public static void clearBigObjByType(String type){
-        List<CB_LoggerBO__b > cBO = new List<CB_LoggerBO__b >();
-        cBO.addAll([SELECT Count__c,Date__c,Type__c FROM CB_LoggerBO__b WHERE Type__c = : type]);
-        Database.deleteImmediate(cBO);
+    public static CB_Logger_Settings__mdt getLoggerMetadata(){
+        return [SELECT Live_is_Active__c,Number_Of_Records_Per_Type__c FROM CB_Logger_Settings__mdt WHERE DeveloperName=:'Settings'];
     }
 
     @AuraEnabled

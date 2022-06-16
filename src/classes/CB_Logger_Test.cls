@@ -31,6 +31,11 @@ private class CB_Logger_Test {
     }
 
     @isTest
+    private static void test_quicklivelogs() {
+        CB_Logger.live('test');
+    }
+
+    @isTest
     private static void test_alertlogs() {
         CB_Logger.alert('alert','test');
         CB_Logger.publish();
@@ -58,8 +63,45 @@ private class CB_Logger_Test {
     }
 
     @isTest
+    private static void test_shotLogsArchive() {
+        CB_Logger.log('log 1','test');
+        CB_Logger.log('log 1','test2');
+        CB_Logger.log('log 1','test3');
+        CB_Logger.publish();
+    }
+
+
+    @isTest
+    private static void test_longLogsArchive() {
+        CB_Logger.messageMaxLength = 500;
+        CB_Logger.log('log 1','PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48aGFzcF9pbmZvPiAgPGhhc3BzY29wZT4gICAgPHZlbmRvciBpZD0iOTI2MDYiPiAgICAgIDxoYXNwIGlkPSI5MTg4MTU1MTkwNDM1MTEwOCIvPiAgICA8L3ZlbmRvcj4gIDwvaGFzcHNjb3BlPiAgPHYyYz5Zb0lkdEtDQ0hhdUFCSFowWXpLQmdnSW1vOF');
+        CB_Logger.log('log 1','PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48aGFzcF9pbmZvPiAgPGhhc3BzY29wZT4gICAgPHZlbmRvciBpZD0iOTI2MDYiPiAgICAgIDxoYXNwIGlkPSI5MTg4MTU1MTkwNDM1MTEwOCIvPiAgICA8L3ZlbmRvcj4gIDwvaGFzcHNjb3BlPiAgPHYyYz5Zb0lkdEtDQ0hhdUFCSFowWXpLQmdnSW1vOF');
+        CB_Logger.log('log 1','PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48aGFzcF9pbmZvPiAgPGhhc3BzY29wZT4gICAgPHZlbmRvciBpZD0iOTI2MDYiPiAgICAgIDxoYXNwIGlkPSI5MTg4MTU1MTkwNDM1MTEwOCIvPiAgICA8L3ZlbmRvcj4gIDwvaGFzcHNjb3BlPiAgPHYyYz5Zb0lkdEtDQ0hhdUFCSFowWXpLQmdnSW1vOF');
+        CB_Logger.publish();
+    }
+
+    @isTest
     private static void test_loglogs() {
         CB_Logger.log('log','test');
+        CB_Logger.publish();
+    }
+    
+    @isTest
+    private static void test_objectbodylogs() {
+        CB_Logger.log(LogType.LOG,'test',(Object)'test');
+        CB_Logger.publish();
+    }
+
+    @isTest
+    private static void test_generallogs() {
+        CB_Logger.log(LogType.LOG,'subject','message');
+        CB_Logger.publish();
+    }
+
+    
+    @isTest
+    private static void test_generalWithCustomUserlogs() {
+        CB_Logger.log(LogType.LOG,'subject','message',UserInfo.getUserId());
         CB_Logger.publish();
     }
 
